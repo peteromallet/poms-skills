@@ -40,6 +40,7 @@ and documents its own runtime credentials and write-path requirements.
 ## Layout
 
 - `megado/` — planning, delegation, review, execution, and handoff guidance
+- `megado-handover/` — portable remote-machine handovers and delivery messages
 - `hivemind/` — Hivemind search skill and dependency-free CLI
 - other directories — reusable task-specific skills
 
