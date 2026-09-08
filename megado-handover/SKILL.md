@@ -98,3 +98,16 @@ The message must name
 the exact project and skills SHAs, current phase/state, authority, objective,
 boundaries, stages and budgets from `run.yaml`, prerequisites, start commands,
 and the selected finish instruction.
+
+## Write a self-contained continuation message
+
+Assume the receiving agent knows nothing about this conversation or Megado.
+Follow [the Hivemind example](examples/hivemind-delivery.md) and adapt
+[the message template](assets/handover-message.md) to the actual project.
+Include both repository URLs and clone commands, an explicit link/path to
+`poms-skills/megado/SKILL.md`, and say it can be read directly without global
+installation. Include the plan entrypoint, authority, role bindings, remaining
+review/oracle ceilings, prerequisites, non-goals, finish instruction, and exact
+prepared baseline commits. Summaries of bindings and caps must match the
+run's authoritative `run.yaml`; never import the example's project settings.
+Return the self-contained message to the user, not merely a link to it.

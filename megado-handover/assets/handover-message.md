@@ -1,59 +1,42 @@
-# Remote-machine handover
+# Copy-paste delivery message template
 
-Copy this message after replacing the bracketed fields with verified values.
+Implement [project objective] using Megado.
 
-## Source
-
-- Project: `[project name]`
-- Clone or safe existing-checkout update: `[command]`
-- Project ref and exact SHA: `[branch/tag]` / `[40-char SHA]`
-- Plan entrypoint: `[portable path to START-HERE.md]`
-- Current phase and state: `[phase]` / `[state]`
-- Megado source URL and exact SHA: `[URL]` / `[40-char SHA]`
-- Publication destination and visibility: `[remote/repository]` / `[public unless explicitly changed]`
-- Receiving mode: `[planning_only | delivery]`
-- Finish authorization: `[package only | normal push | receiving agent creates PR after implementation and validation]`
-
-## Objective and authority
-
-Objective: `[what the recipient must accomplish]`
-
-Authority: `[user/instruction that authorizes this phase]`. Preserve the
-selected boundaries, prior decisions, history, and counters. Roles, stages,
-budgets, and mode come from `[path to run.yaml]`; do not duplicate them here.
-Do not infer merge, deploy, cutover, publication visibility, or a PR unless the
-finish authorization says so.
-
-Prerequisites and unresolved items: `[tools, models, credentials, access, or
-unknowns]`. The receiving agent reports missing capabilities explicitly.
-
-## Start on a fresh machine
+Clone both repositories into unused directories on this machine:
 
 ```sh
-git clone --branch [project branch] [project URL] [project directory]
-git clone [skills URL] ~/.local/share/poms-skills
-mkdir -p ~/.codex/skills
-if [ ! -e ~/.codex/skills/megado ] && [ ! -L ~/.codex/skills/megado ]; then ln -s ~/.local/share/poms-skills/megado ~/.codex/skills/megado; fi
-if [ ! -e ~/.codex/skills/megado-handover ] && [ ! -L ~/.codex/skills/megado-handover ]; then ln -s ~/.local/share/poms-skills/megado-handover ~/.codex/skills/megado-handover; fi
+git clone --branch [project branch] [project repository URL] [project directory]
+git clone [skills repository URL] poms-skills
+git -C poms-skills checkout --detach [inspected skills SHA]
 ```
 
-If a path already exists, inspect it and update only with an authorized
-no-overwrite procedure. Agents without Codex can read
-`~/.local/share/poms-skills/megado/SKILL.md` directly. Read Megado, then
-`[project directory]/[START-HERE path]`, and verify the recorded SHAs and all
-prerequisites before acting.
+If a directory already exists, inspect it and preserve its work; do not overwrite it.
+Read `poms-skills/megado/SKILL.md` ([pinned public skill URL]) and follow it.
+You can use it directly without installing it globally.
 
-## Execution
+Then read `[project directory]/[plan directory]/START-HERE.md`.
+That directory contains the North Star, plan, tasklist, acceptance criteria,
+run configuration, review contract, and current status. The project code is
+included in the same branch.
 
-The captured run is `[planning_only|delivery]`. For delivery, transition the
-accepted mode in `run.yaml` as its schema requires, preserving its configured
-roles, stages, budgets, counters, and boundaries; then execute `[authorized
-stages/tasks]`. For planning-only, package and report without product
-execution. Missing models, tools, or real review packets must be reported
-explicitly; do not silently substitute or claim proof from a plan.
+You are authorized to [exact scope and finish]. [Delivery: activate run.yaml
+from planning_only to delivery as documented; do not request approval already
+granted. Planning-only: update planning documents only.]
 
-Finish: `[package only | normal push and verification | receiving agent creates PR after implementation and validation]`.
-If PR creation is authorized, target `[remote]` and base `[branch]`; the
-receiving agent reports the PR URL and evidence after implementation and
-validation, then stops before merge/deploy/cutover unless separately
-authorized. Return unresolved prerequisites and risks with the final artifact.
+Use the configured role slots: [summarize all seven bindings from run.yaml].
+Review ceilings: [stages and remaining caps, including corrections/restarts].
+Oracle ceiling: [separate remaining cap]. These are ceilings, not quotas.
+Preserve [historical counts] and follow the artifact-based review contract.
+
+First check repository state and establish [prerequisites]. Report missing
+models or capabilities explicitly. Current implementation/evidence state:
+[actual state, including missing evidence].
+
+Preserve [accepted simplifications and non-goals]. [Explicit excluded actions].
+Complete [authorized work and validation], then provide [finish artifacts,
+evidence, and unresolved blockers].
+
+Prepared baseline commits:
+
+- [Project]: [exact source SHA and relationship to handover branch]
+- poms-skills: [exact inspected SHA]
