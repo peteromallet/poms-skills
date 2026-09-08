@@ -6,7 +6,7 @@ description: Prepare a portable Megado project handover for another machine or a
 # Megado handover
 
 Use this skill when a user asks to move a Megado plan and project to another
-machine or agent. It packages evidence and instructions; it does not execute
+machine or agent. It publishes evidence and instructions directly to a Git branch; it does not execute
 the product plan. Read the canonical Megado skill first: normally
 `../megado/SKILL.md` in this checkout, otherwise the source path supplied by
 the user. Read its referenced run and review documents directly as needed.
@@ -29,9 +29,15 @@ name them and why; preserve intentionally included source while excluding
 unrelated dirt, secrets, and private notes. Never silently turn an uncommitted
 working tree into the authoritative source.
 
-## Build a portable closure
+## Publish ordinary files in Git
 
-Select the necessary current plan closure outside ignored `.otto` storage:
+Use the repository branch as the handover. Do not create ZIP files, tarballs,
+archive bundles, or a separate distribution package unless the user explicitly
+requests one. Commit the necessary source and ordinary Markdown/configuration
+files, push the branch to GitHub, and provide a short continuation instruction
+linking to the committed handover message.
+
+Select the necessary current planning documents outside ignored `.otto` storage:
 START-HERE and the linked plan, criteria, objective, goal, status, `run.yaml`,
 authorization, scope, decision, acceptance, and provenance records. Reuse
 tracked project docs and include an ignored or untracked file only when it is
@@ -41,7 +47,7 @@ archives, raw receipts, or machine-local caches. Label planning records as
 planning evidence; they are not proof that product implementation or tests ran.
 Keep historical exploration and counters distinct from the current state.
 
-Package Megado dependencies with fetchable URLs the recipient can access and
+Document Megado dependencies with fetchable URLs the recipient can access and
 exact commits or tags. The handover must state the SHA actually inspected,
 provide a no-overwrite install command, and provide a direct-read fallback.
 Check that native agent capability and every required model are available;
@@ -67,7 +73,7 @@ When the user's delivery authorization includes a PR finish, the receiving
 agent creates the implementation branch and PR after implementation and the
 required validation, then returns its URL with outcome evidence and unresolved
 risks. Record the target remote and base branch. Never infer permission to
-merge, deploy, or cut over from a handover; generic planning-only or packaging
+merge, deploy, or cut over from a handover; generic planning-only or handover
 authorization does not grant a PR.
 
 ## Validate the recipient path
