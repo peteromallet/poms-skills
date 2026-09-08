@@ -81,7 +81,7 @@ If there is neither a concrete decision nor new evidence, apply the existing rul
 **Oracle reply — four fields:**
 - Disposition: proceed / change approach / investigate / blocked.
 - Decision and reason: concise, grounded in the goal and evidence.
-- Next action: a concrete dispatch or bounded investigation; state affected scope. “Investigate further” must name the uncertainty and evidence sought.
+- Next action: a concrete dispatch or bounded investigation; state affected scope. Every executable next action, including actions unrelated to a review correction, carries the outcome, acceptance evidence, dependency scope, and `normal`/`xhard` route to the corresponding `run.yaml` worker. An XHARD action includes its irreducible hard-question justification. “Investigate further” must name the uncertainty and evidence sought; unresolved difficulty is not an executable route.
 - Return condition: what result or changed circumstance requires another decision; otherwise continue within the mandate.
 
 The reply operates within user authorization; the oracle cannot grant missing deployment/scope authority. Pause only dependent work while a decision is unresolved. Continue independent work. Pause the whole run only if the uncertainty affects overall scope, authority or correctness. “Blocked” identifies the actual prerequisite, not mere discomfort.
@@ -154,17 +154,18 @@ Every reviewer is an independent leaf, receives the frozen scope and candidate p
 
 Classify findings as `contract_violation`, `implementation_defect`, `required_evidence_gap`, `optional_improvement`, `out_of_scope` or `stale_or_repeated`. Only the first three can block. The coordinator routes clear in-scope findings under the mandate; the oracle verifies contested claims against source/tests and records an evidence-backed disposition. No automatic promotion of a reviewer's recommendation into authority.
 
-For each finding, keep blocking classification separate from correction difficulty and
-record a recommended route: `normal`, `xhard`, or `oracle` when the route itself is
-uncertain or disputed. A clear finding with a normal route goes to `worker_normal`;
-a clear XHARD route goes to `worker_xhard` with its justification. The coordinator
-may route a genuinely hard correction directly to XHARD; two failed normal
-corrections are a diagnostic signal, not a prerequisite. An `oracle` route pauses
-only the dependent correction until the oracle prescribes the executable next
-action, including its normal/XHARD route, outcome and acceptance evidence. On an
-uncontested finding the coordinator dispatches that prescribed route without a new
-oracle call. Run affected tests before another review. These routing records do not
-create a fixer role or review gate and do not authorize resetting the review budget.
+For each finding, keep blocking classification separate from correction difficulty.
+Only an actionable correction finding receives a recommended difficulty of `normal`
+or `xhard`; optional, out-of-scope, stale, or otherwise unaccepted findings receive
+no dispatch route. An unresolved or disputed difficulty is referred to the oracle,
+then the executable next action receives a `normal` or `xhard` route. A clear normal
+route goes to `worker_normal`; a clear XHARD route goes to `worker_xhard` with its
+justification. The coordinator may route a genuinely hard correction directly to
+XHARD. After two failed substantive correction cycles, require a root-cause
+decision on the brief/tools, decomposition, bounded spike, or justified hard kernel;
+do not silently repeat the same correction. Run affected tests before another
+review. These routing records do not create a fixer role or review gate and do not
+authorize resetting the review budget.
 A review cap ends repetitive model reviewing, not responsibility for the outcome. At
 the stage or total budget cap, request oracle diagnosis if its budget permits,
 continue authorized corrective work/tests where useful, and surface a needed
