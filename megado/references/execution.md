@@ -50,7 +50,7 @@ python ~/.agents/skills/megado/scripts/megado_run_index.py register \
 
 Locate the installed `megado/scripts/megado_run_index.py` if that alias is unavailable. Pass parent session/transcript/resume information when exposed. Registration is idempotent; save the returned logical_run_key. On failure, record one warning and continue—status/source evidence remains authoritative. Do not repeatedly gate progress on the index. Update its hint at meaningful lifecycle changes/completion, not every poll.
 
-A dispatch receipt records actual model/provider, command or native tool, source SHA, cwd, brief and North Star digests, result path/digest, start/end, PID when available and exit status. Generated brief paths avoid quoting large model content into hand-built shell commands; seal CLI stdin and use bounded process supervision. A running process is not a useful result—read its output.
+A dispatch receipt records actual model/provider, command or native tool, source SHA, cwd, brief and North Star digests, result path/digest, start/end, PID when available and exit status. The executable brief and receipt also record the concrete outcome, acceptance evidence, dependency scope, route to `worker_normal` or `worker_xhard`, and—when XHARD—the irreducible hard-question justification. Generated brief paths avoid quoting large model content into hand-built shell commands; seal CLI stdin and use bounded process supervision. A running process is not a useful result—read its output.
 
 ## Integration and test evidence
 

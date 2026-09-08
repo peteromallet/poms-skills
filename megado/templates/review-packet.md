@@ -57,5 +57,11 @@ Verdict: PASS / REWORK / UNKNOWN.
 - PASS: all scoped required criteria have adequate evidence and no unresolved blockers.
 - REWORK: at least one evidenced contract violation or implementation defect, or a required proof gap attributable to the deliverable.
 - UNKNOWN: inaccessible/mismatched candidate or evidence prevents a reliable review; never invent PASS.
-For each finding: criterion ID, classification (contract_violation / implementation_defect / required_evidence_gap / optional_improvement / out_of_scope / stale_or_repeated), exact source/evidence, actual versus required behavior, and smallest required outcome. Do not prescribe a new architecture without necessity.
+For each finding: criterion ID, blocking classification (contract_violation / implementation_defect / required_evidence_gap / optional_improvement / out_of_scope / stale_or_repeated), exact source/evidence, actual versus required behavior, smallest required outcome, and recommended correction route (`normal`, `xhard`, or `oracle` when route/difficulty is uncertain or disputed). Finding classification is separate from correction difficulty. Do not prescribe a new architecture without necessity.
 Return criterion dispositions with evidence references. State North Star alignment (aligned / concrete conflict / not assessable); for completion-only scope, limit this to the applicable invariants rather than a new strategic audit. Separate optional suggestions from blockers. The coordinator follows the mandate and routes contested judgments to the configured oracle.
+
+Any executable correction brief derived from a finding must state the concrete
+outcome, acceptance evidence, source/dependency scope, and route to
+`worker_normal` or `worker_xhard` from `run.yaml`. An XHARD route must include its
+brief hard-question justification. An oracle-prescribed next action must contain
+the same fields; an oracle route is not executable until that disposition exists.

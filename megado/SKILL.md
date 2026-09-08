@@ -114,6 +114,16 @@ Freeze for execution when the coordinator can explain the complete path to the o
 
 Tasks name their outcome, real dependencies, affected scope, model/classification and acceptance proof. Group at natural integration seams; labels do not create global barriers. The coordinator checks explicit goal/task/authorization agreement and sends ambiguous conflicts to the oracle; an extra independent pre-execution contract review is not the ordinary default.
 
+Every executable assignment, including a correction dispatched after review, carries
+the same compact contract: the concrete outcome, acceptance evidence, source and
+dependency scope, and a route of `normal` or `xhard`. The route resolves through
+`run.yaml` to `worker_normal` or `worker_xhard`; it is not a new role. An XHARD
+assignment includes a brief justification naming the irreducible hard question and
+why a precise normal-worker brief is insufficient. The coordinator records these
+fields in the brief/receipt and dispatches to the corresponding configured worker.
+This requirement applies to corrections as well as first-pass tasks; it does not
+add a gate or an extra model call.
+
 In planning-only mode, deliver the plan/tasklist, unresolved assumptions and estimate now. Do not proceed into the execution reference's setup or claim future tests have passed.
 
 For delivery, use [execution mechanics](references/execution.md), dispatch unblocked work, run focused tests during implementation and converge around coherent source checkpoints. Only dependents of a failed invariant must wait. Batches/checkpoints are for integration and source identity, not automatic model-review gates. The oracle adjudicates material plan changes; user scope/authority cannot be expanded by an executor or reviewer.
@@ -144,7 +154,26 @@ Every reviewer is an independent leaf, receives the frozen scope and candidate p
 
 Classify findings as `contract_violation`, `implementation_defect`, `required_evidence_gap`, `optional_improvement`, `out_of_scope` or `stale_or_repeated`. Only the first three can block. The coordinator routes clear in-scope findings under the mandate; the oracle verifies contested claims against source/tests and records an evidence-backed disposition. No automatic promotion of a reviewer's recommendation into authority.
 
-For accepted blockers, dispatch the smallest correction to the normal pool and run affected tests before another review. Two failed substantive correction cycles call for a root-cause decision: repair the brief/tools, decompose, use a bounded spike, or assign only a justified hard kernel to the declared exceptional model. They do not authorize resetting the review budget. A review cap ends repetitive model reviewing, not responsibility for the outcome. At the stage or total budget cap, request oracle diagnosis if its budget permits, continue authorized corrective work/tests where useful, and surface a needed budget/authority decision. The coordinator cannot bypass an unpassed required gate or reset its budget. Do not launch an equivalent review under a new name, reset counters, label failure PASS or hand back a solvable problem merely because reviews are exhausted. If further independent certification is essential, report that gap and seek only the needed review-budget change; never claim unreviewed corrections received a pass. Explicit user round counts take precedence.
+For each finding, keep blocking classification separate from correction difficulty and
+record a recommended route: `normal`, `xhard`, or `oracle` when the route itself is
+uncertain or disputed. A clear finding with a normal route goes to `worker_normal`;
+a clear XHARD route goes to `worker_xhard` with its justification. The coordinator
+may route a genuinely hard correction directly to XHARD; two failed normal
+corrections are a diagnostic signal, not a prerequisite. An `oracle` route pauses
+only the dependent correction until the oracle prescribes the executable next
+action, including its normal/XHARD route, outcome and acceptance evidence. On an
+uncontested finding the coordinator dispatches that prescribed route without a new
+oracle call. Run affected tests before another review. These routing records do not
+create a fixer role or review gate and do not authorize resetting the review budget.
+A review cap ends repetitive model reviewing, not responsibility for the outcome. At
+the stage or total budget cap, request oracle diagnosis if its budget permits,
+continue authorized corrective work/tests where useful, and surface a needed
+budget/authority decision. The coordinator cannot bypass an unpassed required gate
+or reset its budget. Do not launch an equivalent review under a new name, reset
+counters, label failure PASS or hand back a solvable problem merely because reviews
+are exhausted. If further independent certification is essential, report that gap
+and seek only the needed review-budget change; never claim unreviewed corrections
+received a pass. Explicit user round counts take precedence.
 
 The cap applies across renaming/repackaging/checkpoints for the same review scope. Record counts and accepted findings once. Increase a fixed user budget only with their approval; when a new risk requires different scope, explain it rather than hide another review in a new name.
 
