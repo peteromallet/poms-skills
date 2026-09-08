@@ -1,0 +1,23 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+*.log
+*.jsonl
+*.sqlite
+*.sqlite3
+.env
+.env.*
+
+# Local agent/runtime state
+.otto/
+.agents/
+.claude/
+.codex/
+
+# Local-only operational/source material; do not publish from this checkout.
+/_global/
+/agentbox-project-runner/
+/megado-babysit/
+/sync.sh
+/new-arnold-pipeline
+/switch-code-agent
