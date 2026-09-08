@@ -2,7 +2,14 @@
 
 Read only for an authorized unattended/cloud run. Use a wrapper-driven subagent run, not an implicit megaplan chain. Review/model policy comes from the current skill and user declaration; do not recreate old mandatory checkpoint/cumulative review rules in the cloud brief.
 
-Use the current `/workspace/AGENTBOX-LAUNCH.md` on the box (host path `/opt/megaplan-cloud/workspace/AGENTBOX-LAUNCH.md`) for environment-specific steps. The established approach uses an isolated container from `megaplan-cloud-agent:latest`, required agent tooling, dereferenced skill symlinks, transferred auth/model configuration, a Git bundle when the chosen source is not remote, isolated project dependencies, and a wrapper-owned orchestrator with durable status/supervision. Inspect the recipe before reproducing its setup; do not expose auth material in receipts or overwrite protected workloads such as `/workspace/arnold`.
+Use the current host-supplied launch manifest, such as the path exposed through
+`$AGENTBOX_LAUNCH_MANIFEST`, for environment-specific steps. The established
+approach uses a host-selected isolated container, required agent tooling,
+dereferenced skill symlinks, transferred auth/model configuration, a Git bundle
+when the chosen source is not remote, isolated project dependencies, and a
+wrapper-owned orchestrator with durable status/supervision. Inspect the host
+recipe before reproducing its setup; do not expose auth material in receipts or
+overwrite protected workloads named by that recipe.
 
 Transfer the recorded source/goal/North Star and task state. Freeze skill/reference digests and the actual run-specific model/reasoning/review caps in the handoff. Cloud skill copies do not update when laptop files change. Every dispatch uses the receipt wrapper; do not fall back to undocumented direct calls after bootstrap.
 
@@ -13,7 +20,7 @@ At receipt/checkpoint boundaries, the cloud owner reloads the registered operati
 Register the cloud project in the AgentBox project ledger, verify the registration receipt, and link the local discovery record rather than creating two owners:
 
 ```bash
-python ~/.agents/skills/megado/scripts/megado_run_index.py handoff \
+python "$MEGADO_SKILL_ROOT/scripts/megado_run_index.py" handoff \
   --logical-run-key "$LOGICAL_RUN_KEY" --project-id "$AGENTBOX_PROJECT_ID" \
   --evidence "$AGENTBOX_REGISTRATION_RECEIPT"
 ```

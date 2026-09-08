@@ -330,7 +330,7 @@ def cmd_top_authors(fl):
     limit = int(fl.get("limit", 5))
     limit = max(1, min(limit, 10))
     # Sample both ends of each window; monthly sub-windows for recent history
-    # (newest-only sampling misses year-long spread like Draken's 21k in 2024).
+    # (newest-only sampling misses a contributor's year-long activity spread).
     windows = [("2024-01-01", "2025-01-01")]
     cur = date(2025, 1, 1)
     while cur < date.today():

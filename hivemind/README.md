@@ -60,7 +60,7 @@ hivemind cites KIND ID      distillations citing an item  [--resolve] [--json]
   function to re-issue expiring Discord CDN attachment URLs.
 - The API key is the Supabase anon publishable key, embedded in the script —
   safe to commit and share.
-- Author names are case-sensitive (`Kijai` ≠ `kijai`); threads and reply
+- Author names are case-sensitive (`ExampleAuthor` ≠ `exampleauthor`); threads and reply
   references do not exist in the export (flattened); unscoped ordered scans on
   big channels can hit statement timeouts — see `SKILL.md` for the recovery
   playbook.

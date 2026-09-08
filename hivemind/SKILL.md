@@ -4,7 +4,7 @@ description: >
   Search the Banodoco knowledge corpus — a public PostgREST endpoint
   combining a Discord message feed, external resources, and curated
   distillations. Covers generative video/image tooling (Wan, Wan Animate,
-  VACE, LTX, Comfy, Kijai's nodes, SCAIL, InfiniteTalk, training, etc.).
+  VACE, LTX, Comfy, community nodes, SCAIL, InfiniteTalk, training, etc.).
   Use this whenever the user asks "what does Banodoco say about X",
   "best practices for <model>", "what are people doing with <tool>",
   "what settings did <person> recommend", or wants real-world tips that
@@ -19,7 +19,7 @@ description: >
 A read-only PostgREST endpoint exposes the Banodoco knowledge corpus —
 community knowledge about video/image generation that you can't get
 from official docs: workflow tips, model comparisons, settings tweaks,
-gotchas, links to Kijai/Ablejones/community workflows.
+gotchas, links to community workflows.
 
 **v2** adds a unified feed combining messages, external resources
 (articles, transcripts, workflows), and curated distillations
@@ -62,10 +62,10 @@ installs it (Python 3.9+, stdlib only) — see `README.md`. Commands:
 - `hivemind trend "scail" --months 6` — monthly counts, newest first
   (corpus-wide; `--channel C` scopes to one channel, `--since/--until` bound
   the window)
-- `hivemind authors Kijai matt3o` — message counts per author (case-sensitive)
+- `hivemind authors ExampleAuthor OtherAuthor` — message counts per author (case-sensitive)
 - `hivemind top-authors` — rank authors by message count (sampled discovery,
   exact counts; top ~3 stable, lower ranks approximate)
-- `hivemind recent --channel wan_chatter --author Kijai --term lightx2v` —
+- `hivemind recent --channel wan_chatter --author ExampleAuthor --term lightx2v` —
   recent messages (no `--channel` = ALL channels; `--term` repeats for AND,
   `--full` untruncated, `--since/--until`, `--count` for a total,
   `--order asc|desc`, `--no-order` fallback, `--before-id` to page,
@@ -132,7 +132,7 @@ Count probe (no rows returned; total is in the `Content-Range: */N` response
 header; returns HTTP **206**, not 200):
 
 ```bash
-curl -s -D - -o /dev/null "$API/message_feed?select=message_id&author_name=eq.Kijai&limit=0" -H "$AUTH" -H "Prefer: count=exact" | grep -i content-range
+curl -s -D - -o /dev/null "$API/message_feed?select=message_id&author_name=eq.ExampleAuthor&limit=0" -H "$AUTH" -H "Prefer: count=exact" | grep -i content-range
 ```
 
 Single message + permalink:
@@ -367,8 +367,8 @@ dedupe offline, or add a read-only `message_feed_channels` view upstream.
   (`hivemind around ID --window N`); reply parentage is best-effort.
 - **No reply/reference columns:** `reply_to`, `message_reference`,
   `referenced_message_id` all 42703. Reply chains must be inferred from
-  content adjacency + author-turn analysis; multi-message bursts (Kijai's
-  advice often spans 4 messages) and interleaved parallel conversations make
+  content adjacency + author-turn analysis; multi-message bursts from one
+  author often span several messages, and interleaved parallel conversations make
   naive "next message" heuristics wrong.
 - **Offset paging trap:** `offset` *without* `order` silently repeats the same
   rows at every offset. Always page by time buckets or keyset
@@ -391,26 +391,14 @@ row. **First-message footgun:** "first message of a day/author" needs
 `order=created_at.asc&limit=1` — a `--since` + desc query returns the *newest*
 of the first day, which is usually not the true first message.
 
-## Power users to watch
+## Author-focused search
 
-Most-active posters (exact message counts, snapshot 2026-08-18; probe
-`author_name=eq.NAME` to refresh — names are case-sensitive): Kijai 117,405;
-Draken 73,729; Cubey 22,579; Lumifel 21,952; Juampab12 20,957; fredbliss
-18,436; hicho 15,261; VRGameDevGirl84(RTX 5090) 15,812; Ablejones 12,037;
-BNDC 10,733 (bot).
-
-- **Kijai** — author of WanVideoWrapper / many Wan and LTX ComfyUI nodes.
-- **Ablejones** — context windows, color matching, native Comfy integrations.
-- **djbfilmz** — heavy Wan Animate user, mocap / reskinning experiments.
-- **42hub** — curates the [wanx-troopers.github.io](https://wanx-troopers.github.io/) knowledge base.
-- **BNDC** — the daily-summary bot.
-
-This is a *watchlist*, not a top-N ranking: high total counts ≠ expertise, and
-the API has no distinct-author query — building a ranking requires sampling
-`select=author_name` over time windows and probing candidates
-(`hivemind top-authors` does this). Display names are fragile: renames are
-invisible (`VRGameDevGirl84` alone = 0), and `Deleted User` is a shared
-artifact, not a person.
+Use `hivemind top-authors` or a scoped `author_name=eq.NAME` probe when an
+author-specific search is useful. Author names are case-sensitive, and the API
+has no distinct-author query, so rankings require sampling over time windows
+and probing candidates. Treat activity counts as routing signals rather than
+evidence of expertise or endorsement. Display names are fragile: renames are
+invisible, and `Deleted User` is a shared artifact rather than a unique person.
 
 ## Search playbook
 
@@ -458,7 +446,7 @@ Prefer: count=exact
 Author volume probe (how many messages has a person posted?):
 
 ```
-?select=message_id&author_name=eq.Kijai&limit=0
+?select=message_id&author_name=eq.ExampleAuthor&limit=0
 Prefer: count=exact
 ```
 
@@ -470,30 +458,25 @@ probe() { curl -s -D - -o /dev/null \
   "$API?select=message_id&author_name=eq.$1&limit=0" \
   -H "apikey: $KEY" -H "Prefer: count=exact" \
   | grep -i content-range | sed "s/^/$1: /"; }
-probe Kijai; probe fannovel16; probe hannahsubmarine; probe matt3o
+probe ExampleAuthor; probe OtherAuthor; probe ThirdAuthor; probe FourthAuthor
 ```
 
-Author names are **case-sensitive**: `eq.Kijai` matches ~117k messages while
-`eq.kijai` matches 0. Snapshot 2026-08-18: Kijai 117405, matt3o 4717,
-jfischoff 3402, manshoety 3366; fannovel16, hannahsubmarine, trenthunter,
-purz = 0. Heavy counts (100k+ matching rows) can intermittently 500 with
-`canceling statement due to statement timeout` — retry or narrow with a
-channel/time filter.
+Author names are **case-sensitive**: changing the case can turn a populated
+probe into a zero-result query. Heavy counts (100k+ matching rows) can
+intermittently 500 with `canceling statement due to statement timeout` — retry
+or narrow with a channel/time filter.
 
 Author + topic:
 
 ```
-?author_name=eq.Kijai&content=ilike.*lightx2v*
+?author_name=eq.ExampleAuthor&content=ilike.*lightx2v*
 &order=created_at.desc&limit=30
 ```
 
-**Prefer the CLI for author+topic:** `hivemind recent --author Kijai --term lightx2v`
-drops the server-side order and sorts client-side; raw author+topic `ilike` on
-100k-message authors (Kijai = 117k) reliably 57014s even channel-scoped and
-order-less, and unscoped author+topic count probes 500 — scope by channel
-first. Per-author vocabulary matters: Kijai's context-window node is called
-"Context Options" (not "context window") — his `--term "context window"` hits
-stop ~2025-11 while "context options" reaches 2026-02. Synonym-hunt before
+**Prefer the CLI for author+topic:** `hivemind recent --author ExampleAuthor --term lightx2v`
+drops the server-side order and sorts client-side. Raw author+topic searches on
+very high-volume authors can still time out even when channel-scoped; scope by
+channel first. Per-author vocabulary matters, so try likely synonyms before
 concluding an author went quiet.
 
 `ilike` has no case and treats `_` as a single-char wildcard (so `*ace_step*`
@@ -515,15 +498,15 @@ one value):
 &created_at=gte.2026-04-01&created_at=lt.2026-05-01
 ```
 
-Example routing result (snapshot 2026-08; counts drift as the corpus grows):
-"What settings has Kijai recommended for the lightx2v LoRA?" sounds like LoRA
-training, but count probes showed `lightx2v` mostly lives in Wan channels:
+Example routing result (counts drift as the corpus grows):
+"What settings has an author recommended for the lightx2v LoRA?" sounds like
+LoRA training, but count probes showed `lightx2v` mostly lives in Wan channels:
 
 ```
 daily=8, wan=2127, ltx=23, comfy=132, training=52, general=144
 ```
 
-So search the Wan group, then filter by `author_name=eq.Kijai`, adding `cfg`,
+So search the Wan group, then filter by `author_name=eq.ExampleAuthor`, adding `cfg`,
 `steps`, or `settings` terms only after the route is known.
 
 ## Trend questions
@@ -550,7 +533,7 @@ channel_name=in.(wan_chatter,wan_comfyui,resources)&created_at=lt.2024-12-20
 
 ### Reading a day's digest
 
-BNDC posts `daily_summaries` as a 13–27 message burst at ~11:00 UTC; the first
+The summary bot posts `daily_summaries` as a 13–27 message burst at ~11:00 UTC; the first
 message of each day is the "# Daily Update" anchor and separators/empty
 messages pollute the tail. To read one day cleanly:
 
