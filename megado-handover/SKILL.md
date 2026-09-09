@@ -13,6 +13,16 @@ the user. Read its referenced run and review documents directly as needed.
 
 ## Establish the handover contract
 
+Prefer a dedicated handover branch on top of the existing project's current
+`main` (or its actual default branch), published to that project's remote.
+Place the portable control package in a clearly named tracked directory such
+as `docs/projects/<project-name>/`. Keep snapshot folders as evidence sources,
+not the ongoing project home; do not create a separate handover repository by
+default. For multi-repository work, name the host repository and pin the other
+repositories and their roles in the package. This preference does not change
+the plan's selected implementation revisions or authorize a push to `main`.
+Explicit user destinations and base refs take precedence.
+
 Record the authoritative project path, selected worktree or ref, run directory,
 recipient, desired receiving mode (`planning_only` or `delivery`), destination
 remote, base branch, and publication visibility. For this workflow, default
