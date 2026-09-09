@@ -60,6 +60,41 @@ missing capability or model explicitly, with no silent substitution.
 
 ## Audit and publish safely
 
+### Private ZIPs and credentials
+
+When the user requests an archive with execution access, build a private
+transfer outside every Git worktree. Keep public planning artifacts separate
+from an explicit allowlist of private credentials, resource configuration and
+selected recovery evidence. Public visibility never applies to the private
+transfer. Do not copy entire env files, SSH directories, credential stores,
+or account/agent credentials the recipient already has.
+
+Check the actual launch path before asking for secrets: a test harness may
+create its own local Runtime and test credentials. Use credentials already
+authorized for this task from configured sources; never print values, put
+them in command arguments/logs, or commit them. Prefer a dedicated transfer
+SSH identity or recipient public key over copying a general-purpose private
+key. Document how that identity is authorized on future owned resources.
+
+Verify access with bounded read-only authentication/resource checks where
+possible; do not launch billable resources to test a handover. Distinguish
+credential present, authentication verified, resource visible, and live
+execution untested. A rejected or unavailable credential is an explicit
+prerequisite, not a working setup. Ask for its file/secret-store reference
+without requesting that the value be pasted into chat, and continue packaging
+independent material. Do not ship known-rejected keys as usable credentials.
+
+Include a private manifest of exactly what is transferred, a no-overwrite
+setup/import command, a redacted readiness report, and the receiving-agent
+message. Restrict local archive/staging permissions and state plainly when a
+ZIP contains unencrypted credentials. For shared or untrusted transport, use
+recipient-key encryption or a separately delivered secret-store reference;
+do not put a decryption secret beside the encrypted payload in the same ZIP.
+Validate archive paths, permissions, extraction into a fresh directory, and
+setup behavior without exposing values. Never upload the private ZIP to the
+public handover branch. Preserve product execution mode and budgets unless
+the user actually changes them.
+
 Audit every intended published file and reachable history for credentials,
 private operational details, unnecessary personal data, watchlists, and
 internal paths. A publishable key in intended configuration is not proof of
