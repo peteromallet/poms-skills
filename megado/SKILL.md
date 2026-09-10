@@ -15,7 +15,27 @@ User instructions, including planning-only scope and review overrides, control t
 - **Delivery:** plan enough to execute, implement in isolated source custody, test and integrate, review under the policy below, then sync only as authorized. Read [execution mechanics](references/execution.md) before source mutation or executable certification.
 - **Unattended/cloud delivery:** also read [AgentBox handoff](references/agentbox.md) when a cloud handoff is actually needed. Do not load or perform cloud setup for ordinary planning.
 
-For a plan-only source inspection, record the repository/ref and dirty state, use read-only access, and identify whether uncommitted material is included. A detached snapshot is optional when concurrent changes make the source ambiguous. Do not silently exclude authoritative dirty work. Planning artifacts may live in `.otto/runs/<run-id>/`; do not create empty execution directories or stage/commit product source for planning.
+For a plan-only source inspection, record the repository/ref and dirty state, use read-only access, and identify whether uncommitted material is included. A detached snapshot is optional when concurrent changes make the source ambiguous. Do not silently exclude authoritative dirty work. Use the run location and structure below for planning as well as delivery; do not create empty execution directories or stage/commit product source for planning.
+
+## Run location and structure
+
+For a new run, set `PROJECT_ROOT` to the invoking repository and `OTTO_DIR` to `$PROJECT_ROOT/.otto/runs/<run-id>/`. The directory is spelled `.otto`. Inspect existing runs first and resume the matching run rather than create a duplicate. Use another control root only when the user explicitly selects one; record it once. Keep architecture/product documents at their existing source paths and link them from the run.
+
+The minimum setup structure is:
+
+```text
+.otto/runs/<run-id>/
+  run.yaml          # sole model, stage and budget declaration
+  northstar.md      # enduring direction
+  agent_goal.md     # scope, authority and links
+  plan.md           # approach, assumptions and estimate
+  tasklist.md       # outcomes, dependencies, routes and proof
+  status.md         # mode, counters, source identity and next action
+```
+
+Add source-state records, implementation criteria or a launch README only where useful. Create briefs, receipts and evidence directories when actual work produces them; planning-only setup needs no execution scaffolding. Report the canonical run path when handing off.
+
+Control storage and source-branch custody are independent. A request to work on main or avoid new branches does not move run artifacts out of `.otto`; record that source-custody override in the goal. Git ignoring `.otto` is intentional local control storage, not a reason to relocate it into tracked docs or force-add it. Preserve existing run state when explicitly relocating a run, update live references, and leave only one authoritative copy.
 
 ## Establish the minimum useful outcome
 
@@ -66,6 +86,12 @@ For planning, a plan and tasklist plus concise goal/direction/status are enough.
 ## Oracle decision requests
 
 Use this lightweight exchange when a worker or delegated coordinator needs the designated oracle's judgment. It is not a new service, scheduled review or requirement to ask about routine work. Proceed under the current brief for ready tasks, prescribed tests and authorized correction patterns. Ask before consequential dependent work when evidence contradicts the plan, alternatives materially affect scope/interfaces/data/authority, findings conflict, or repeated failures undermine the approach. A coordinator may recommend; it cannot grant itself exceptions.
+
+**Persistent oracle conversation:** Default to one resumable oracle conversation per coherent run when the runtime supports it. Bootstrap it with compact project background, the North Star, current goal and authority boundaries, and paths to the authoritative configuration, plan, status and prior decisions. Record its conversation/session identifier and resume mechanism in the existing run notes so a replacement coordinator can continue it. Resume that conversation for consequential follow-ups, supplying the specific decision, changes since the last exchange and exact evidence links instead of repeating the full project context. Routine status lookups and dispatch remain with the coordinator.
+
+Before deciding, the oracle refreshes relevant current state and source/test identities from authoritative artifacts; conversation memory is not evidence that facts are still current. Keep rulings, reasons and return conditions in the existing run notes so the conversation is recoverable. If resumption is unavailable or context becomes unwieldy, start a replacement from those artifacts and a compact handover of unresolved questions and decision rationale. Across runs, carry forward relevant durable decisions and explicitly refresh the mandate rather than depend on one indefinitely growing conversation. Recovery or replacement preserves existing authority and budget counters.
+
+Independent reviewers still use fresh conversations with the declared scope and evidence; the persistent oracle does not replace independent review. Each invoked oracle response, including a follow-up in the same conversation, consumes the existing oracle call budget. Persistence changes context delivery, not invocation triggers, authority or review policy.
 
 Keep request and reply together under a stable decision ID in existing run notes (for example a section in status.md). Reuse that ID when revisiting the same question; link deeper evidence rather than paste transcripts.
 
